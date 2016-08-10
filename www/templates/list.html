@@ -1,0 +1,16 @@
+<ion-view view-title="My Notes">
+  <!-- Step 1 Declear the controller  -->
+  <ion-content ng-controller="ListCtrl">
+    <!-- Step 2 Add a div with a class as list -->
+    <div class="list">
+      <!-- Step 2.1 Add a div with a second class called item and ng-repeat -->
+      <!-- Step 4 change the div to a link to allow the list items to be clickable and use a
+      URL fragment to stay on the same page but call a different fragment using the #-->
+      <a href="#/edit/{{note.id}}" class="item" ng-repeat="note in notes">
+        <!--Step 3 acces the attributes in the object and decide on how they are to be displayed in the list-->
+        <h2>{{note.title}}</h2>
+        <p>{{note.description}}</p>
+      </a>
+    </div>
+  </ion-content>
+</ion-view>
