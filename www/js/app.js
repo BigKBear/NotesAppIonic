@@ -11,9 +11,16 @@ app.config(function($stateProvider, $urlRouterProvider) {
     templateUrl: 'templates/list.html'
   });
 
+  $stateProvider.state('add', {
+    url: '/add',
+    templateUrl: 'templates/edit.html',
+    controller: 'AddCtrl'
+  });
+
   $stateProvider.state('edit', {
     url: '/edit/:noteId',
-    templateUrl: 'templates/edit.html'
+    templateUrl: 'templates/edit.html',
+    controller: 'EditCtrl'
   });
 
   $urlRouterProvider.otherwise('/list');
@@ -44,19 +51,35 @@ var notes = [
   }
 
   function updateNote(note) {
-  for (var i = 0; i < notes.length; i++) {
-    if (notes[i].id === note.id) {
-      notes[i] = note;
-      return;
+    for (var i = 0; i < notes.length; i++) {
+      if (notes[i].id === note.id) {
+        notes[i] = note;
+        return;
+      }
     }
   }
-}
 
+function createNote(note) {
+  notes.push(note);
+}
 //Step 2 create the controller
 app.controller('ListCtrl', function($scope){
   //Step 3.2 created a note object on the scope
   $scope.notes = notes;
+});
 
+app.controller('AddCtrl', function($scope, $state) {
+
+  $scope.note = {
+    id: new Date().getTime().toString(),
+    title: '',
+    description: ''
+  };
+
+  $scope.save = function() {
+    createNote($scope.note);
+    $state.go('list');
+  };
 });
 
 //the $state is a service that allows us to get the id passed in the url
@@ -69,7 +92,6 @@ app.controller('EditCtrl', function($scope, $state){
     $state.go('list');
   };
 });
-
 
 //Step1.1 calling the run on the app variable
 app.run(function($ionicPlatform) {
