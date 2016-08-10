@@ -33,6 +33,7 @@ var notes = [
   }
 ];
 
+  /*HELPER FUNCTIONS*/
   function getNote(noteId){
     for(var i = 0; i < notes.length; i++){
       if(notes[i].id === noteId){
@@ -41,6 +42,15 @@ var notes = [
     }
     return undefined;
   }
+
+  function updateNote(note) {
+  for (var i = 0; i < notes.length; i++) {
+    if (notes[i].id === note.id) {
+      notes[i] = note;
+      return;
+    }
+  }
+}
 
 //Step 2 create the controller
 app.controller('ListCtrl', function($scope){
@@ -52,8 +62,12 @@ app.controller('ListCtrl', function($scope){
 //the $state is a service that allows us to get the id passed in the url
 app.controller('EditCtrl', function($scope, $state){
   //we first set a variavble on the scope with our noteId passed in the url
-  $scope.note = getNote($state.params.noteId);
-
+  $scope.note = angular.copy(getNote($state.params.noteId));
+  
+  $scope.save = function() {
+    updateNote($scope.note);
+    $state.go('list');
+  };
 });
 
 
