@@ -1,9 +1,7 @@
-//step3.1 wrap everything in a annomus function to prevent global variable in Step 3
 (function() {
-//Step 1 create the app variable
+
 var app = angular.module('mynotes', ['ionic', 'mynotes.notestore']);
 
-//State provider service
 app.config(function($stateProvider, $urlRouterProvider) {
 
   $stateProvider.state('list', {
@@ -27,9 +25,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('/list');
 });
 
-//Step 2 create the controller
-app.controller('ListCtrl', function($scope, NoteStore){
-  //Step 3.2 created a note object on the scope
+app.controller('ListCtrl', function($scope, NoteStore){  
   $scope.notes = NoteStore.list();
   $scope.reordering =false;
 
@@ -38,7 +34,7 @@ app.controller('ListCtrl', function($scope, NoteStore){
   };
 
   $scope.move = function(note, fromIndex, toIndex){
-    //console.log('moving from ' + fromIndex + ' to ' + toIndex);
+    
     NoteStore.move(note, fromIndex, toIndex);
   };
 
@@ -62,9 +58,8 @@ app.controller('AddCtrl', function($scope, $state, NoteStore) {
   };
 });
 
-//the $state is a service that allows us to get the id passed in the url
 app.controller('EditCtrl', function($scope, $state, NoteStore){
-  //we first set a variavble on the scope with our noteId passed in the url
+  
   $scope.note = angular.copy(NoteStore.getNote($state.params.noteId));
   
   $scope.save = function() {
@@ -73,7 +68,6 @@ app.controller('EditCtrl', function($scope, $state, NoteStore){
   };
 });
 
-//Step1.1 calling the run on the app variable
 app.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     if(window.cordova && window.cordova.plugins.Keyboard) {

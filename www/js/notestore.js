@@ -1,11 +1,12 @@
+/*
+Note Store Service
+Creator: Kyle St.Hill
+Purpose: Manage the notes data
+*/
 angular.module('mynotes.notestore', [])
-/* Creating a Service
-  Service to manage the sahared notes data called NoteStore
-   */
    .factory('NoteStore', function(){
     var notes = angular.fromJson(window.localStorage['notes'] || '[]');
 
-    //window.localStorage['notes']
     function persist(){
     	window.localStorage['notes'] = angular.toJson(notes);
     }
