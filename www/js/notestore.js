@@ -3,7 +3,12 @@ angular.module('mynotes.notestore', [])
   Service to manage the sahared notes data called NoteStore
    */
    .factory('NoteStore', function(){
-    var notes = [];
+    var notes = angular.fromJson(window.localStorage['notes'] || '[]');
+
+    //window.localStorage['notes']
+    function persist(){
+    	window.localStorage['notes'] = angular.toJson(notes);
+    }
 
     return {
       list:function(){
@@ -21,12 +26,14 @@ angular.module('mynotes.notestore', [])
 
       createNote: function(note) {
         notes.push(note);
+        persist();
       },
 
       updateNote: function(note){
         for (var i = 0; i < notes.length; i++) {
           if (notes[i].id === note.id) {
             notes[i] = note;
+            persist();
             return;
           }
         }
