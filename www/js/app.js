@@ -1,7 +1,7 @@
 //step3.1 wrap everything in a annomus function to prevent global variable in Step 3
 (function() {
 //Step 1 create the app variable
-var app = angular.module('starter', ['ionic']);
+var app = angular.module('mynotes', ['ionic', 'mynotes.notestore']);
 
 //State provider service
 app.config(function($stateProvider, $urlRouterProvider) {
@@ -26,49 +26,13 @@ app.config(function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('/list');
 });
 
-//Step 3 create a global variable
-var notes = [
-  {
-    id: '1',
-    title: 'First Note',
-    description: 'This is my first note.'
-  },
-  {
-    id: '2',
-    title: 'Second Note',
-    description: 'This is my second note.'
-  }
-];
-
-  /*HELPER FUNCTIONS*/
-  function getNote(noteId){
-    for(var i = 0; i < notes.length; i++){
-      if(notes[i].id === noteId){
-        return notes[i];
-      }
-    }
-    return undefined;
-  }
-
-  function updateNote(note) {
-    for (var i = 0; i < notes.length; i++) {
-      if (notes[i].id === note.id) {
-        notes[i] = note;
-        return;
-      }
-    }
-  }
-
-function createNote(note) {
-  notes.push(note);
-}
 //Step 2 create the controller
-app.controller('ListCtrl', function($scope){
+app.controller('ListCtrl', function($scope, NoteStore){
   //Step 3.2 created a note object on the scope
-  $scope.notes = notes;
+  $scope.notes = NoteStore.list();
 });
 
-app.controller('AddCtrl', function($scope, $state) {
+app.controller('AddCtrl', function($scope, $state, NoteStore) {
 
   $scope.note = {
     id: new Date().getTime().toString(),
@@ -77,18 +41,18 @@ app.controller('AddCtrl', function($scope, $state) {
   };
 
   $scope.save = function() {
-    createNote($scope.note);
+    NoteStore.createNote($scope.note);
     $state.go('list');
   };
 });
 
 //the $state is a service that allows us to get the id passed in the url
-app.controller('EditCtrl', function($scope, $state){
+app.controller('EditCtrl', function($scope, $state, NoteStore){
   //we first set a variavble on the scope with our noteId passed in the url
-  $scope.note = angular.copy(getNote($state.params.noteId));
+  $scope.note = angular.copy(NoteStore.getNote($state.params.noteId));
   
   $scope.save = function() {
-    updateNote($scope.note);
+    NoteStore.updateNote($scope.note);
     $state.go('list');
   };
 });
