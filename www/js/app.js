@@ -30,6 +30,10 @@ app.config(function($stateProvider, $urlRouterProvider) {
 app.controller('ListCtrl', function($scope, NoteStore){
   //Step 3.2 created a note object on the scope
   $scope.notes = NoteStore.list();
+
+  $scope.remove = function(noteId){
+    NoteStore.remove(noteId);
+  };
 });
 
 app.controller('AddCtrl', function($scope, $state, NoteStore) {

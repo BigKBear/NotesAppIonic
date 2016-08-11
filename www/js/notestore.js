@@ -37,8 +37,17 @@ angular.module('mynotes.notestore', [])
             return;
           }
         }
-      }
+      },
 
+      remove: function(noteId){
+	      	for(var i = 0; i < notes.length; i++){
+	          if(notes[i].id === noteId){
+	            notes.splice(i, 1);
+	            persist();
+	            return;
+	          }
+	      }
+	  	}
     };
 
    });
