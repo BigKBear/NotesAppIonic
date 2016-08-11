@@ -8,7 +8,8 @@ app.config(function($stateProvider, $urlRouterProvider) {
 
   $stateProvider.state('list', {
     url: '/list',
-    templateUrl: 'templates/list.html'
+    templateUrl: 'templates/list.html',
+    controller: 'ListCtrl'
   });
 
   $stateProvider.state('add', {
@@ -30,10 +31,21 @@ app.config(function($stateProvider, $urlRouterProvider) {
 app.controller('ListCtrl', function($scope, NoteStore){
   //Step 3.2 created a note object on the scope
   $scope.notes = NoteStore.list();
+  $scope.reordering =false;
 
   $scope.remove = function(noteId){
     NoteStore.remove(noteId);
   };
+
+  $scope.move = function(note, fromIndex, toIndex){
+    //console.log('moving from ' + fromIndex + ' to ' + toIndex);
+    NoteStore.move(note, fromIndex, toIndex);
+  };
+
+  $scope.toggleReordering = function(){
+    $scope.reordering = !$scope.reordering;
+  };
+
 });
 
 app.controller('AddCtrl', function($scope, $state, NoteStore) {
