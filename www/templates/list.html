@@ -1,17 +1,20 @@
 <ion-view view-title="My Notes">
   <!-- Step 1 Declear the controller  -->
-  <ion-content ng-controller="ListCtrl">
+  <ion-content>
     <!-- Step 2 Add a div with a class as list -->
-    <ion-list>
+    <!-- Section 4 lecture 26 -->
+    <ion-list show-reorder="reordering">
       <!-- Step 2.1 Add a div with a second class called item and ng-repeat -->
       <!-- Step 4 change the div to a link to allow the list items to be clickable and use a
       URL fragment to stay on the same page but call a different fragment using the #-->
       <ion-item class="item-remove-animate item-icon-right"
-                href="#/edit/{{note.id}}" ng-repeat="note in notes">
+                href="#/edit/{{note.id}}" ng-repeat="note in notes track by note.id">
         <!--Step 3 acces the attributes in the object and decide on how they are to be displayed in the list-->
         <h2>{{note.title}}</h2>
         <p>{{note.description}}</p>
         <i class="icon ion-arrow-right-b"></i>
+        <ion-reorder-button class="ion-drag"
+                          on-reorder="move(note, $fromIndex, $toIndex)"></ion-reorder-button>
         <ion-option-button class="button-assertive icon-left ion-trash-b"
                       ng-click="remove(note.id)">Delete</ion-option-button>
       </ion-item>
@@ -22,5 +25,7 @@
   <div class="bar bar-footer bar-stable">
     <a href="#/add"
       class="button button-assertive icon-left ion-compose">New Note</a>
+      <button class="button button-light icon-left ion-shuffle" 
+              ng-click="toggleReordering()">Reorder</button>
   </div>
 </ion-view>
