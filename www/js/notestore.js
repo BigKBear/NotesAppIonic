@@ -4,57 +4,43 @@ Creator: Kyle St.Hill
 Purpose: Manage the notes data
 */
 angular.module('mynotes.notestore', [])
-   .factory('NoteStore', function(){
-    var notes = angular.fromJson(window.localStorage['notes'] || '[]');
+//Step 1 Add http angular service used to make http request
+   .factory('NoteStore', function($http){
 
-    function persist(){
-    	window.localStorage['notes'] = angular.toJson(notes);
-    }
+    //Variable decleared that contains the base URL can be called in future from a configuration file
+    var apiUrl = 'http://localhost:8200';
 
     return {
+      //Fucton used to return a list of notes from the REST API
       list:function(){
-        return notes;
+        //TODO
+        /*Make an Http get request from the /notes/ path the get request returns a promise
+        we then call the .then on the get request and pass a call back function that will receive the response
+        */
+        return $http.get(apiUrl + '/notes/').then(function(response){
+          return response.data;
+        });
       },
 
-      getNote: function(noteId){
-        for(var i = 0; i < notes.length; i++){
-          if(notes[i].id === noteId){
-            return notes[i];
-          }
-        }
-        return undefined;
+      get: function(noteId){
+        return $http.get(apiUrl + '/notes/' + noteId)
+          .then(function(response){
+          return response.data;
+        });
       },
 
-      createNote: function(note) {
-        notes.push(note);
-        persist();
+      create: function(note) {
+        return $http.post(apiUrl + '/notes/', note);
       },
 
-      updateNote: function(note){
-        for (var i = 0; i < notes.length; i++) {
-          if (notes[i].id === note.id) {
-            notes[i] = note;
-            persist();
-            return;
-          }
-        }
-      },
-
-      move: function(note, fromIndex, toIndex){
-      	notes.splice(fromIndex,1);
-      	notes.splice(toIndex,0,note);
-      	persist();
+      update: function(note){
+        return $http.put(apiUrl + '/notes/' + note.id, note);
       },
 
       remove: function(noteId){
-	      	for(var i = 0; i < notes.length; i++){
-	          if(notes[i].id === noteId){
-	            notes.splice(i, 1);
-	            persist();
-	            return;
-	          }
-	      }
-	  	}
+	      return $http.delete(apiUrl + '/notes/' + noteId);
+      }
+
     };
 
    });
