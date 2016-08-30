@@ -10,6 +10,10 @@ angular.module('mynotes.notestore', [])
     //Variable decleared that contains the base URL can be called in future from a configuration file
     var apiUrl = 'http://localhost:8200';
 
+//    var token = '';
+
+    //$http.defaults.headers.common.Authorization = 'Bearer ' + token;
+
     return {
       //Fucton used to return a list of notes from the REST API
       list:function(){
