@@ -21,30 +21,30 @@ angular.module('mynotes.notestore', [])
         /*Make an Http get request from the /notes/ path the get request returns a promise
         we then call the .then on the get request and pass a call back function that will receive the response
         */
-        return $http.get(apiUrl + '/notes/').then(function(response){
+       return $http.get(apiUrl + '/notes/').then(function(response) {
           return response.data;
         });
       },
 
-      get: function(noteId){
+      get: function(noteId) {
         return $http.get(apiUrl + '/notes/' + noteId)
-          .then(function(response){
-          return response.data;
-        });
+          .then(function(response) {
+            return response.data;
+          });
       },
 
       create: function(note) {
         return $http.post(apiUrl + '/notes/', note);
       },
 
-      update: function(note){
+      update: function(note) {
         return $http.put(apiUrl + '/notes/' + note.id, note);
       },
 
-      remove: function(noteId){
-	      return $http.delete(apiUrl + '/notes/' + noteId);
+      remove: function(noteId) {
+        return $http.delete(apiUrl + '/notes/' + noteId);
       }
 
     };
 
-   });
+  });

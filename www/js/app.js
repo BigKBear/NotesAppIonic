@@ -1,6 +1,3 @@
-/* Must have the chrome extension 
-https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi
- */
 (function() {
 
 var app = angular.module('mynotes', ['ionic', 'mynotes.user', 'mynotes.notestore']);
@@ -16,7 +13,6 @@ app.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider.state('list', {
     url: '/',
     templateUrl: 'templates/list.html',
-    controller: 'ListCtrl',
     cache: false
   });
 
@@ -35,41 +31,45 @@ app.config(function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('/');
 });
 
-app.controller('LoginCtrl', function($scope, $state, $ionicHistory, User){ 
+app.controller('LoginCtrl', function($scope, $state, $ionicHistory, User) {
 
-      $scope.credentials ={
-        user: '',
-        password:''
-      };
+  $scope.credentials = {
+    user: '',
+    password: ''
+  };
+  $scope.loginFailed = false;
 
-      $scope.login = function(){
-        User.login($scope.credentials)
-          .then(function(){
-            $ionicHistory.nextViewOptions({historyRoot: true});
-            $state.go('list');
-          });
-      };
+  $scope.login = function() {
+    User.login($scope.credentials)
+      .then(function() {
+        $ionicHistory.nextViewOptions({historyRoot: true});
+        $state.go('list');
+      })
+      .catch(function() {
+        $scope.loginFailed = true;
+      });
+  };
+
 });
 
-app.controller('ListCtrl', function($scope, NoteStore){  
-  
+app.controller('ListCtrl', function($scope, NoteStore) {
+
   function refreshNotes() {
-    NoteStore.list().then(function(notes){
+    NoteStore.list().then(function(notes) {
       $scope.notes = notes;
     });
   }
   refreshNotes();
-  //$scope.reordering =false;
 
-  $scope.remove = function(noteId){
+  $scope.remove = function(noteId) {
     NoteStore.remove(noteId).then(refreshNotes);
   };
+
 });
 
 app.controller('AddCtrl', function($scope, $state, NoteStore) {
 
   $scope.note = {
-    //id: new Date().getTime().toString(),
     title: '',
     description: ''
   };
@@ -81,11 +81,12 @@ app.controller('AddCtrl', function($scope, $state, NoteStore) {
   };
 });
 
-app.controller('EditCtrl', function($scope, $state, NoteStore){
+app.controller('EditCtrl', function($scope, $state, NoteStore) {
+
   NoteStore.get($state.params.noteId).then(function(note) {
     $scope.note = note;
   });
-  
+
   $scope.save = function() {
     NoteStore.update($scope.note).then(function() {
       $state.go('list');
@@ -94,9 +95,9 @@ app.controller('EditCtrl', function($scope, $state, NoteStore){
 });
 
 app.run(function($rootScope, $state, $ionicPlatform, User) {
-  $rootScope.$on('stateChangeStart', function(event, toState){
+  $rootScope.$on('$stateChangeStart', function(event, toState) {
 
-    if(!User.isLoggedIn() && toState.name !== 'login'){
+    if (!User.isLoggedIn() && toState.name !== 'login') {
       event.preventDefault();
       $state.go('login');
     }
@@ -104,11 +105,10 @@ app.run(function($rootScope, $state, $ionicPlatform, User) {
   });
 
   $ionicPlatform.ready(function() {
-    if(window.cordova && window.cordova.plugins.Keyboard) {
+    if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      cordova.plugins.Keyboard.disableScroll(true);
     }
-    if(window.StatusBar) {
+    if (window.StatusBar) {
       StatusBar.styleDefault();
     }
   });

@@ -2,13 +2,16 @@
   <ion-content>
     <div class="list card">
       <div class="item item-input">
-        <input type="text" placeholder="username"
+        <input type="text" placeholder="Username"
           ng-model="credentials.user">
       </div>
       <div class="item item-input">
-        <input type="password" placeholder="password"
+        <input type="password" placeholder="Password"
           ng-model="credentials.password">
       </div>
+    </div>
+    <div class="padding text-center" ng-show="loginFailed">
+      <i class="ion-alert-circled"></i> Invalid credentials
     </div>
     <div class="padding">
       <button class="button button-block button-positive"

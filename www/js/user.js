@@ -1,23 +1,34 @@
-angular.module('mynotes.user',[])
+angular.module('mynotes.user', [])
 	.factory('User', function($http) {
 
 		var apiUrl = 'http://localhost:8200';
 
-		var loggedIn = false;
-		
-		return{
+    var token = localStorage['apiToken'] || '';
+    if (isNotEmpty(token)) {
+      setHeader(token);
+    }
 
-			login: function(credentials){
+    function isNotEmpty(token) {
+      return token !== '';
+    }
+
+    function setHeader(token) {
+      $http.defaults.headers.common.Authorization = 'Bearer ' + token;
+    }
+
+		return {
+
+			login: function(credentials) {
 				return $http.post(apiUrl + '/authenticate', credentials)
-					.then(function(response){
-						var token = response.data.token;
-						$http.defaults.headers.common.Authorization = 'Bearer ' + token;
-						loggedIn = true;
+					.then(function(response) {
+            token = localStorage['apiToken'] = response.data.token;
+            setHeader(token);
 					});
 			},
 
 			isLoggedIn: function() {
-				return loggedIn;
-			}
+        return isNotEmpty(token);
+      }
+
 		};
-	 });
+	});
