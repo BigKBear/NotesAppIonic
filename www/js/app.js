@@ -31,6 +31,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('/');
 });
 
+//$ionicHistory is used to know that there is no need to go back to the login page via the back button
 app.controller('LoginCtrl', function($scope, $state, $ionicHistory, User) {
 
   $scope.credentials = {
@@ -40,8 +41,10 @@ app.controller('LoginCtrl', function($scope, $state, $ionicHistory, User) {
   $scope.loginFailed = false;
 
   $scope.login = function() {
+    //check if the use is already logged in
     User.login($scope.credentials)
       .then(function() {
+        //the below line lets ionic ensure the history is new
         $ionicHistory.nextViewOptions({historyRoot: true});
         $state.go('list');
       })

@@ -1,4 +1,5 @@
 angular.module('mynotes.user', [])
+//factory for a service called User
 	.factory('User', function($http) {
 
 		var apiUrl = 'http://localhost:8200';
@@ -16,8 +17,7 @@ angular.module('mynotes.user', [])
       $http.defaults.headers.common.Authorization = 'Bearer ' + token;
     }
 
-		return {
-
+    return {     
 			login: function(credentials) {
 				return $http.post(apiUrl + '/authenticate', credentials)
 					.then(function(response) {
@@ -26,9 +26,9 @@ angular.module('mynotes.user', [])
 					});
 			},
 
-			isLoggedIn: function() {
+		   //function to tell us if the user is already logged in or not
+    	isLoggedIn: function() {
         return isNotEmpty(token);
       }
-
 		};
 	});
